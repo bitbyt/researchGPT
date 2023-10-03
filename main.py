@@ -185,13 +185,13 @@ agent = initialize_agent(
 
 
 def main():
-    st.set_page_config(page_title="AI research agent", page_icon=":bird:")
+    st.set_page_config(page_title="Research Agent", page_icon=":bird:")
 
     st.header("Research Agent")
     query = st.text_input("Research goal")
 
     if query:
-        st.write("Doing research for ", query)
+        st.write("Researching for ", query)
 
         result = agent({"input": query})
 
