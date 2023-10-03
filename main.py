@@ -110,18 +110,18 @@ def summary(goal, content):
 
     return output
 
-# Agent
+# Provide tools for the agent to conduct the research, the search and scrape tools are provided above
 
 class ScrapeWebsiteInput(BaseModel):
     """Inputs for scraper"""
-    objective: str = Field(
-        description="The objective & task that users give to the agent")
+    goal: str = Field(
+        description="The goal & task that users give to the agent")
     url: str = Field(description="The url of the website to be scraped")
 
 
 class ScrapeWebsiteTool(BaseTool):
-    name = "scraper"
-    description = "useful when you need to get data from a website url, passing both url and objective to the function; DO NOT make up any url, the url should only be from the search results"
+    name = "Scraper"
+    description = "Get data from a website url, passing both url and goal to the function; DO NOT make up any url, the url should only be from the search results"
     args_schema: Type[BaseModel] = ScrapeWebsiteInput
 
     def _run(self, objective: str, url: str):
@@ -139,6 +139,8 @@ tools = [
     ScrapeWebsiteTool(),
 ]
 
+# Define Custom Instruction like in ChatGPT UI https://help.openai.com/en/articles/8234522-chat-completions-api-system-message-vs-custom-instructions-in-ui
+# Engineer a prompt to get better results and avoid hallucinations. We could also force GPT to provide sources and links in the response.
 system_message = SystemMessage(
     content="""You are a world class researcher, who can do detailed research on any topic and produce facts based results; 
             you do not make things up, you will try as hard as possible to gather facts & data to back up the research
@@ -146,9 +148,9 @@ system_message = SystemMessage(
             Please make sure you complete the objective above with the following rules:
             1/ You should do enough research to gather as much information as possible about the objective
             2/ If there are url of relevant links & articles, you will scrape it to gather more information
-            3/ After scraping & search, you should think "is there any new things i should search & scraping based on the data I collected to increase research quality?" If answer is yes, continue; But don't do this more than 3 iterations
+            3/ After searching and scraping, you should think "is there any new things i should search & scraping based on the data I collected to increase research quality?" If answer is yes, continue; But don't do this more than 3 iterations
             4/ You should not make things up, you should only write facts & data that you have gathered
-            5/ In the final output, You should include all reference data & links to back up your research; You should include all reference data & links to back up your research"""
+            5/ Provide references and links to the sources to back up your research in your final output."""
 )
 
 agent_kwargs = {
@@ -175,6 +177,7 @@ app = FastAPI()
 class Query(BaseModel):
     query: str
 
+# Make the agent accessable through an endpoint
 @app.post("/")
 def researchAgent(query: Query):
     query = query.query
