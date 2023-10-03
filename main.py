@@ -20,6 +20,7 @@ from langchain.schema import SystemMessage
 from pydantic import BaseModel, Field
 from typing import Type
 from fastapi import FastAPI
+import streamlit as st
 
 load_dotenv()
 browserless_api_key = os.getenv("BROWSERLESS_API_KEY")
@@ -170,14 +171,32 @@ agent = initialize_agent(
     memory=memory,
 )
 
-app = FastAPI()
+# app = FastAPI()
 
-class Query(BaseModel):
-    query: str
+# class Query(BaseModel):
+#     query: str
 
-@app.post("/")
-def researchAgent(query: Query):
-    query = query.query
-    content = agent({"input": query})
-    actual_content = content['output']
-    return actual_content
+# @app.post("/")
+# def researchAgent(query: Query):
+#     query = query.query
+#     content = agent({"input": query})
+#     actual_content = content['output']
+#     return actual_content
+
+
+def main():
+    st.set_page_config(page_title="AI research agent", page_icon=":bird:")
+
+    st.header("AI research agent :bird:")
+    query = st.text_input("Research goal")
+
+    if query:
+        st.write("Doing research for ", query)
+
+        result = agent({"input": query})
+
+        st.info(result['output'])
+
+
+if __name__ == '__main__':
+    main()
