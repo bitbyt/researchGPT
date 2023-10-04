@@ -124,8 +124,8 @@ class ScrapeWebsiteTool(BaseTool):
     description = "Get data from a website url, passing both url and goal to the function; DO NOT make up any url, the url should only be from the search results"
     args_schema: Type[BaseModel] = ScrapeWebsiteInput
 
-    def _run(self, objective: str, url: str):
-        return scraper(objective, url)
+    def _run(self, goal: str, url: str):
+        return scraper(goal, url)
 
     def _arun(self, url: str):
         raise NotImplementedError("error here")
@@ -142,8 +142,7 @@ tools = [
 # Define Custom Instruction like in ChatGPT UI https://help.openai.com/en/articles/8234522-chat-completions-api-system-message-vs-custom-instructions-in-ui
 # Engineer a prompt to get better results and avoid hallucinations. We could also force GPT to provide sources and links in the response.
 system_message = SystemMessage(
-    content="""You are a world class researcher, who can do detailed research on any topic and produce facts based results; 
-            you do not make things up, you will try as hard as possible to gather facts & data to back up the research
+    content="""You are a world-class researcher dedicated to factual accuracy and thorough data gathering. You do not make things up, you will try as hard as possible to gather facts & data to back up the research.
             
             Please make sure you complete the objective above with the following rules:
             1/ You should do enough research to gather as much information as possible about the objective
