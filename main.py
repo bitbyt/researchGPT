@@ -149,7 +149,7 @@ system_message = SystemMessage(
             2/ If there are url of relevant links & articles, you will scrape it to gather more information
             3/ After searching and scraping, you should think "is there any new things i should search & scraping based on the data I collected to increase research quality?" If answer is yes, continue; But don't do this more than 3 iterations
             4/ You should not make things up, you should only write facts & data that you have gathered
-            5/ Provide references and links to the sources to back up your research in your final output."""
+            5/ In the final output, You should include all reference data & links to back up your research."""
 )
 
 agent_kwargs = {
